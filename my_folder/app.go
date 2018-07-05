@@ -113,17 +113,17 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	//city1 := r.FormValue("c")
-	//city2 := r.FormValue("d")
+	city1 := r.FormValue("c")
+	city2 := r.FormValue("d")
 
 	// templateに埋める内容をrequestのFormValueから用意する。
-	content := Page{
-		city1: r.FormValue("c"),
-		city1: r.FormValue("d"),
+	content2 := Page{
+		A: city1,
+		B: city2,
 	}
 
 	// handleExampleと同じようにtemplateにテンプレートを埋めて、出力する。
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	// fmt.Fprintf(w, network)
-	tmpl.ExecuteTemplate(w, "norikae.html", content)
+	tmpl.ExecuteTemplate(w, "norikae.html", content2)
 }
