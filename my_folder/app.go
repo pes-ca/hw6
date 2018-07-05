@@ -122,9 +122,13 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 	//	B: city2,
 	// }
 
-	fmt.Fprint(w, network)
+	// fmt.Fprint(w, network)
+	// -> [{Outer Loop [Pallet Town Viridian City Pewter City Cerulean City Lavender Town Fuschia City Celadon City Saffron City Lavender Town]} {Inner Loop [Saffron City Vermillion City Fuschia City Celadon City Saffron City]} {Victory Road [Viridian City Mt. Silver Indigo Plateau]} {Seafoam Island Ferry [Fuschia City Cinnibar island Pallet Town]} {Route 11 [Vermillion City Lavender Town]} {Diglett Network [Vermillion Cave Viridian Cave Rock Tunnel Cave]}]
+
 	// fmt.Fprint(w, network[0])
 	// -> {Outer Loop [Pallet Town Viridian City Pewter City Cerulean City Lavender Town Fuschia City Celadon City Saffron City Lavender Town]}
+
+	fmt.Fprint(w, network[0][1])
 
 
 
