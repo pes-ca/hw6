@@ -46,7 +46,7 @@ func handleExample(w http.ResponseWriter, r *http.Request) {
 
 	// example.htmlというtemplateをcontentの内容を使って、{{.A}}などのとこ
 	// ろを実行して、内容を埋めて、wに書き込む。
-	tmpl.ExecuteTemplate(w, "test.html", content)
+	// tmpl.ExecuteTemplate(w, "test.html", content)
 }
 
 func getRuneAt(s string, i int) rune {
@@ -54,7 +54,7 @@ func getRuneAt(s string, i int) rune {
     return rs[i]
 }
 
-func joinWords(w http.ResponseWriter, word1 string, word2 string) {
+func joinWords(w http.ResponseWriter, word1 string, word2 string) string{
 		combined_word := ""
 
 		len_1 := utf8.RuneCountInString(word1)
@@ -74,11 +74,12 @@ func joinWords(w http.ResponseWriter, word1 string, word2 string) {
 				combined_word += string(getRuneAt(word2, (i-1)/2))
 			}
     }
+		return combined_word + "\n"
     //for pos, c := range word1 {
 			//	combined_word += string([]rune{c})
         // println("位置:", pos, "文字:", string([]rune{c}))
 
-		return combined_word + "\n"
+
 }
 
 
