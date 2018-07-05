@@ -1,7 +1,7 @@
 package app
 
 import (
-	"fmt"
+	//"fmt"
 	"encoding/json"
 	"html/template"
 	"net/http"
@@ -115,6 +115,6 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 
 	// handleExampleと同じようにtemplateにテンプレートを埋めて、出力する。
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	fmt.Fprintf(w, network)
-	//tmpl.ExecuteTemplate(w, "norikae.html", network)
+	// fmt.Fprintf(w, network)
+	tmpl.ExecuteTemplate(w, "norikae.html", network)
 }
