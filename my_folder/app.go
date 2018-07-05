@@ -85,7 +85,7 @@ type Line struct {
 	Stations []string
 }
 
-// Pokemon!
+// Pokemon
 // TransitNetworkは http://pokemon.fantasy-transit.appspot.com/net?format=json
 // の一番外側のリストのことを表しています。
 type TransitNetwork []Line
