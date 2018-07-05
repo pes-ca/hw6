@@ -1,0 +1,17 @@
+<html>
+  <head><title>JSONを読み込む例</title></head>
+  <body>
+    路線：
+    <ul>
+      {{range .}}
+      <li> {{.Name}}
+        <ul>
+          {{range .Stations}}
+          <li> {{.}} </li>
+          {{end}}
+        </ul>
+      </li>
+      {{end}}
+    </ul>
+  </body>
+</html>
