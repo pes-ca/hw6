@@ -30,9 +30,6 @@ type Page struct {
 func handleExample(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	//A := "あいうえお"
-	//B := "かきくけこ"
-
 	A := r.FormValue("a")
 	B := r.FormValue("b")
 	result := joinWords(w, A, B)
