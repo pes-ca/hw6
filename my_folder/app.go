@@ -113,8 +113,8 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	city1 := r.FormValue("c")
-	city2 := r.FormValue("d")
+	//city1 := r.FormValue("c")
+	//city2 := r.FormValue("d")
 
 	// templateに埋める内容をrequestのFormValueから用意する。
 	//content2 := Page{
