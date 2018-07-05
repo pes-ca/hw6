@@ -46,7 +46,7 @@ func joinWords(word1 string word2 string) {
 				combined_word += string([]rune{c})
         // println("位置:", pos, "文字:", string([]rune{c}))
     }
-
+		return combined_word
 }
 
 
