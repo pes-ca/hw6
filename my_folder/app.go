@@ -45,20 +45,37 @@ func handleExample(w http.ResponseWriter, r *http.Request) {
 	// tmpl.ExecuteTemplate(w, "test.html", content)
 }
 
-func joinWords(w http.ResponseWriter, word1 string, word2 string) {
-		combined_word := ""
-    for pos, c := range word1 {
-				combined_word += string([]rune{c})
-        // println("位置:", pos, "文字:", string([]rune{c}))
-				combined_word += string(getRuneAt(word2, pos))
-    }
-		fmt.Fprintf(w, combined_word + "\n")
-}
-
 func getRuneAt(s string, i int) rune {
     rs := []rune(s)
     return rs[i]
 }
+
+func joinWords(w http.ResponseWriter, word1 string, word2 string) {
+		combined_word := ""
+
+		len_1 := utf8.RuneCountInString(s)
+		len_2 := utf8.RuneCountInString(s)
+
+		if len_1 >= len_2 {
+			len = len_1
+		} else {
+			len = len_2
+		}
+
+    for i := 0; i < 2 * len ; i++ {
+      if i % 2 == 0 {
+				combined_word += string(getRuneAt(word1, i))
+			} else {
+				combined_word += string(getRuneAt(word2, i))
+			}
+    }
+    //for pos, c := range word1 {
+			//	combined_word += string([]rune{c})
+        // println("位置:", pos, "文字:", string([]rune{c}))
+
+		fmt.Fprintf(w, combined_word + "\n")
+}
+
 
 
 // LineはJSONに入ってくる線路の情報をtypeとして定義している。このJSON
