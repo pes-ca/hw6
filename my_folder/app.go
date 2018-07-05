@@ -69,9 +69,13 @@ func joinWords(w http.ResponseWriter, word1 string, word2 string) string{
 
     for i := 0; i < max_len ; i++ {
       if i % 2 == 0 {
-				combined_word += string(getRuneAt(word1, i/2))
+				if i/2 <= len_1 {
+					combined_word += string(getRuneAt(word1, i/2))
+				}
 			} else {
-				combined_word += string(getRuneAt(word2, (i-1)/2))
+				if (i-1)/2 <= len_2 {
+					combined_word += string(getRuneAt(word2, (i-1)/2))
+				}
 			}
     }
 		return combined_word + "\n"
