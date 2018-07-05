@@ -34,8 +34,6 @@ func handleExample(w http.ResponseWriter, r *http.Request) {
 	B := r.FormValue("b")
 	result := joinWords(w, A, B)
 
-	// fmt.Fprintf(w, result)
-
 	// templateに埋める内容をrequestのFormValueから用意する。
 	content := Page{
 		A: result,
@@ -76,11 +74,6 @@ func joinWords(w http.ResponseWriter, word1 string, word2 string) string{
 			}
     }
 		return combined_word + "\n"
-    //for pos, c := range word1 {
-			//	combined_word += string([]rune{c})
-        // println("位置:", pos, "文字:", string([]rune{c}))
-
-
 }
 
 
@@ -92,7 +85,8 @@ type Line struct {
 	Stations []string
 }
 
-// TransitNetworkは http://fantasy-transit.appspot.com/net?format=json
+// Pokemon!
+// TransitNetworkは http://pokemon.fantasy-transit.appspot.com/net?format=json
 // の一番外側のリストのことを表しています。
 type TransitNetwork []Line
 
@@ -105,7 +99,7 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 	client := urlfetch.Client(ctx)
 
 	// JSONとしての路線グラフ内容を読み込む
-	resp, err := client.Get("http://fantasy-transit.appspot.com/net?format=json")
+	resp, err := client.Get("http://pokemon.fantasy-transit.appspot.com/net?format=json")
 	if err != nil {
 		panic(err)
 	}
