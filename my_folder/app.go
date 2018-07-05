@@ -41,7 +41,7 @@ func handleExample(w http.ResponseWriter, r *http.Request) {
 }
 
 func joinWords(word1 string word2 string) {
-		var combined_word = ""
+		combined_word := ""
     for pos, c := range word1 {
 				combined_word += string([]rune{c})
         // println("位置:", pos, "文字:", string([]rune{c}))
