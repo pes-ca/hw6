@@ -55,6 +55,11 @@ func joinWords(w http.ResponseWriter, word1 string, word2 string) {
 		fmt.Fprintf(w, combined_word + "\n")
 }
 
+func getRuneAt(s string, i int) rune {
+    rs := []rune(s)
+    return rs[i]
+}
+
 
 // LineはJSONに入ってくる線路の情報をtypeとして定義している。このJSON
 // にこの名前にこういうtypeのデータが入ってくるということを表している。
