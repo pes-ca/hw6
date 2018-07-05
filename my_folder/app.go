@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"encoding/json"
 	"html/template"
 	"net/http"
@@ -32,8 +33,8 @@ func handleExample(w http.ResponseWriter, r *http.Request) {
 
 	// A := r.FormValue("a")
 	// B := r.FormValue("b")
+	joinWords(A, B)
 
-	fmt.Fprintf(w, joinWords(A, B) + "\n")
 	// templateに埋める内容をrequestのFormValueから用意する。
 	// content := Page{
 	// 	A: joinWords(A, B),
@@ -50,7 +51,7 @@ func joinWords(word1 string, word2 string) {
 				combined_word += string([]rune{c})
         // println("位置:", pos, "文字:", string([]rune{c}))
     }
-		return combined_word
+		fmt.Fprintf(w, combined_word + "\n")
 }
 
 
