@@ -122,7 +122,7 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 	//	B: city2,
 	// }
 
-	fmt.Println(w, network[0])
+	fmt.FPrint(w, network[0])
 
 	// handleExampleと同じようにtemplateにテンプレートを埋めて、出力する。
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
