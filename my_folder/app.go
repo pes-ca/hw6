@@ -8,6 +8,8 @@ import (
 
 	"google.golang.org/appengine"
 	"google.golang.org/appengine/urlfetch"
+
+	"unicode/utf8"
 )
 
 func init() {
@@ -53,13 +55,13 @@ func getRuneAt(s string, i int) rune {
 func joinWords(w http.ResponseWriter, word1 string, word2 string) {
 		combined_word := ""
 
-		len_1 := utf8.RuneCountInString(s)
-		len_2 := utf8.RuneCountInString(s)
+		len_1 := utf8.RuneCountInString(word1)
+		len_2 := utf8.RuneCountInString(word2)
 
 		if len_1 >= len_2 {
-			len = len_1
+			max_len := len_1
 		} else {
-			len = len_2
+			max_len := len_2
 		}
 
     for i := 0; i < 2 * len ; i++ {
