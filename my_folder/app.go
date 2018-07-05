@@ -27,8 +27,8 @@ type Page struct {
 func handleExample(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	A: r.FormValue("a"),
-	B: r.FormValue("b"),
+	A := r.FormValue("a"),
+	B := r.FormValue("b"),
 
 	// templateに埋める内容をrequestのFormValueから用意する。
 	content := Page{
