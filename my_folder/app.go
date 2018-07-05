@@ -126,4 +126,5 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	// fmt.Fprintf(w, network)
 	tmpl.ExecuteTemplate(w, "norikae.html", content2)
+	tmpl.ExecuteTemplate(w, "norikae.html", network)
 }
