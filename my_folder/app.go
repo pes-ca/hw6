@@ -37,10 +37,12 @@ func handleExample(w http.ResponseWriter, r *http.Request) {
 	B := r.FormValue("b")
 	result := joinWords(w, A, B)
 
+	fmt.Fprintf(w, result)
+
 	// templateに埋める内容をrequestのFormValueから用意する。
-	content := Page{
-		A: result,
-	}
+	//content := Page{
+	//	A: result,
+	//}
 
 	// example.htmlというtemplateをcontentの内容を使って、{{.A}}などのとこ
 	// ろを実行して、内容を埋めて、wに書き込む。
