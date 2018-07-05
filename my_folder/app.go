@@ -30,21 +30,21 @@ type Page struct {
 func handleExample(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	A := "あいうえお"
-	B := "かきくけこ"
+	//A := "あいうえお"
+	//B := "かきくけこ"
 
-	// A := r.FormValue("a")
-	// B := r.FormValue("b")
-	joinWords(w, A, B)
+	A := r.FormValue("a")
+	B := r.FormValue("b")
+	result := joinWords(w, A, B)
 
 	// templateに埋める内容をrequestのFormValueから用意する。
-	// content := Page{
-	// 	A: joinWords(A, B),
-	// }
+	content := Page{
+		A: result,
+	}
 
 	// example.htmlというtemplateをcontentの内容を使って、{{.A}}などのとこ
 	// ろを実行して、内容を埋めて、wに書き込む。
-	// tmpl.ExecuteTemplate(w, "test.html", content)
+	tmpl.ExecuteTemplate(w, "test.html", content)
 }
 
 func getRuneAt(s string, i int) rune {
@@ -76,7 +76,7 @@ func joinWords(w http.ResponseWriter, word1 string, word2 string) {
 			//	combined_word += string([]rune{c})
         // println("位置:", pos, "文字:", string([]rune{c}))
 
-		fmt.Fprintf(w, combined_word + "\n")
+		return combined_word + "\n"
 }
 
 
