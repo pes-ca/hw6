@@ -57,11 +57,12 @@ func joinWords(w http.ResponseWriter, word1 string, word2 string) {
 
 		len_1 := utf8.RuneCountInString(word1)
 		len_2 := utf8.RuneCountInString(word2)
+		max_len := 0
 
 		if len_1 >= len_2 {
-			max_len := len_1 * 2
+			max_len = len_1 * 2
 		} else {
-			max_len := len_2 * 2
+			max_len = len_2 * 2
 		}
 
     for i := 0; i < max_len ; i++ {
