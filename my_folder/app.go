@@ -128,7 +128,7 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 	// fmt.Fprint(w, network[0])
 	// -> {Outer Loop [Pallet Town Viridian City Pewter City Cerulean City Lavender Town Fuschia City Celadon City Saffron City Lavender Town]}
 
-	fmt.Fprint(w, network[0][1])
+	fmt.Fprint(w, network[0].Stations)
 
 
 
