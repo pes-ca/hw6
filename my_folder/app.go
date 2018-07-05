@@ -122,7 +122,11 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 	//	B: city2,
 	// }
 
-	fmt.Fprint(w, network[0])
+	fmt.Fprint(w, network)
+	// fmt.Fprint(w, network[0])
+	// -> {Outer Loop [Pallet Town Viridian City Pewter City Cerulean City Lavender Town Fuschia City Celadon City Saffron City Lavender Town]}
+
+
 
 	// handleExampleと同じようにtemplateにテンプレートを埋めて、出力する。
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
