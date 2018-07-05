@@ -30,17 +30,18 @@ func handleExample(w http.ResponseWriter, r *http.Request) {
 	A := r.FormValue("a")
 	B := r.FormValue("b")
 
+	fmt.Fprintf(w, joinWords(A, B) + "\n")
 	// templateに埋める内容をrequestのFormValueから用意する。
-	content := Page{
-		A: joinWords(A string B string),
-	}
+	// content := Page{
+	// 	A: joinWords(A, B),
+	// }
 
 	// example.htmlというtemplateをcontentの内容を使って、{{.A}}などのとこ
 	// ろを実行して、内容を埋めて、wに書き込む。
-	tmpl.ExecuteTemplate(w, "test.html", content)
+	// tmpl.ExecuteTemplate(w, "test.html", content)
 }
 
-func joinWords(word1 string word2 string) {
+func joinWords(word1 string, word2 string) {
 		combined_word := ""
     for pos, c := range word1 {
 				combined_word += string([]rune{c})
