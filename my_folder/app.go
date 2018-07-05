@@ -6,8 +6,8 @@ import (
 	"html/template"
 	"net/http"
 
-	//"google.golang.org/appengine"
-	//"google.golang.org/appengine/urlfetch"
+	"google.golang.org/appengine"
+	"google.golang.org/appengine/urlfetch"
 
 	"unicode/utf8"
 )
@@ -81,4 +81,45 @@ func joinWords(w http.ResponseWriter, word1 string, word2 string) string{
         // println("位置:", pos, "文字:", string([]rune{c}))
 
 
+}
+
+
+
+// LineはJSONに入ってくる線路の情報をtypeとして定義している。このJSON
+// にこの名前にこういうtypeのデータが入ってくるということを表している。
+type Line struct {
+	Name     string
+	Stations []string
+}
+
+// TransitNetworkは http://fantasy-transit.appspot.com/net?format=json
+// の一番外側のリストのことを表しています。
+type TransitNetwork []Line
+
+func handleNorikae(w http.ResponseWriter, r *http.Request) {
+	// Appengineの「Context」を通してAppengineのAPIを利用する。
+	ctx := appengine.NewContext(r)
+
+	// clientはAppengine用のHTTPクライエントで、他のウェブページを読み込
+	// むことができる。
+	client := urlfetch.Client(ctx)
+
+	// JSONとしての路線グラフ内容を読み込む
+	resp, err := client.Get("http://fantasy-transit.appspot.com/net?format=json")
+	if err != nil {
+		panic(err)
+	}
+
+	// 読み込んだJSONをパースするJSONのDecoderを作る。
+	decoder := json.NewDecoder(resp.Body)
+
+	// JSONをパースして、「network」に保存する。
+	var network TransitNetwork
+	if err := decoder.Decode(&network); err != nil {
+		panic(err)
+	}
+
+	// handleExampleと同じようにtemplateにテンプレートを埋めて、出力する。
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	tmpl.ExecuteTemplate(w, "norikae.html", network)
 }
