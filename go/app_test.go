@@ -25,7 +25,6 @@ func TestPata(t *testing.T) {
 		handlePata(w, req)
 		if !strings.Contains(w.Body.String(), test.want) {
 			t.Errorf("/pata with a=%v b=%v got: %v wanted %v", test.a, test.b, w.Body.String(), test.want)
-		fmt.Fprintf(w, "Hello world!\n")
 		}
 	}
 }
