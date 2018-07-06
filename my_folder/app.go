@@ -204,7 +204,7 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
 							flag1 = 1
 						}
 					}
-					for n := 0; n < len(cityToCities[last_city]) ; n ++ {
+					for n := 0; n < len(cityToCities[cityID]) ; n ++ {
 						if cityToCities[cityID][n] == last_city {
 							flag2 = 1
 						}
@@ -237,7 +237,7 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
 							flag1 = 1
 						}
 					}
-					for n := 0; n < len(cityToCities[last_city]) ; n ++ {
+					for n := 0; n < len(cityToCities[len(numToCity)-1]) ; n ++ {
 						if cityToCities[len(numToCity)-1][n] == last_city {
 							flag2 = 1
 						}
