@@ -147,7 +147,10 @@ type Dic struct {
 	loops []int
 }
 
-func networkInterpreter(w http.ResponseWriter, network TransitNetwork) []string, []string, []Dic, []Dic {
+
+
+//  []string, []string, []Dic, []Dic
+func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
 	// make a list of
 	// city1 [ list of loops that contain city1 ]
 	// city2 [ list of loops that contain city2 ]
