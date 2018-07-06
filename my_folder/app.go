@@ -131,11 +131,51 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 	// fmt.Fprint(w, network[0].Stations)
 	// [Pallet Town Viridian City Pewter City Cerulean City Lavender Town Fuschia City Celadon City Saffron City Lavender Town]
 
-	fmt.Fprint(w, network[0].Stations[0])
+	// fmt.Fprint(w, network[0].Stations[0])
+	// Pallet Town
 
 
 	// handleExampleと同じようにtemplateにテンプレートを埋めて、出力する。
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	// tmpl.ExecuteTemplate(w, "norikae.html", network)
+	networkInterpreter(w, network)
 
+}
+
+type Dic struct {
+	city  int
+	loops []int
+}
+
+func networkInterpreter(w, network TransitNetwork) []string, []string, []Dic, []Dic {
+	// make a list of
+	// city1 [ list of loops that contain city1 ]
+	// city2 [ list of loops that contain city2 ]
+	// ...
+
+	cityToNum := map[string]int{} //
+	numToCity := []string //
+	numToLoop := []string //
+	cityToLoops := []Dic
+	loopToCities := []Dic
+
+	for i := 0; i < len(network) ; i++ {
+		append(numToLoop, network[i].Name)
+		for j := 0; j < len(network[i].Stations) ; j++ {
+			// city: network[i].Stations[j]
+
+			if cityID, ok := cityToNum[network[i].Stations[j]]; ok {
+        append(cityToLoops[cityID].loops, len(numToLoop)-1)
+    	} else {
+				append(numToCity, network[i].Stations[j])
+				cityToNum[network[i].Stations[j]] = len(numToCity)-1
+				var l Dic
+				Fprint(w, l)
+				append(cityToLoops, {len(numToCity)-1 [len(numToLoop)-1]})
+    	}
+		}
+	}
+
+
+	return cityNum, loopNum, cityToLoops
 }
