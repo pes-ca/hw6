@@ -162,7 +162,7 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) (map[stri
 	// fmt.Fprint(w, cityToNum)
 
 	numToCity := make([]string, 0)
-	// numToLoop := make([]string, 0)
+	numToLoop := make([]string, 0)
 
 	// adjacency list
 	cityToCities := make([][]int, 15)
