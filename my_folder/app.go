@@ -159,9 +159,10 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) []string,
 	cityToLoops := []Dic
 	loopToCities := []Dic
 
-	for i := 0; i < len(network) ; i++ {
+	for i := 0; i < 1 ; i++ { // i < len(network)
 		append(numToLoop, network[i].Name)
-		for j := 0; j < len(network[i].Stations) ; j++ {
+		fmt.Fprint(w, numToLoop)
+		for j := 0; j < 1 ; j++ { // j < len(network[i].Stations
 			// city: network[i].Stations[j]
 
 			if cityID, ok := cityToNum[network[i].Stations[j]]; ok {
@@ -169,8 +170,8 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) []string,
     	} else {
 				append(numToCity, network[i].Stations[j])
 				cityToNum[network[i].Stations[j]] = len(numToCity)-1
-				var l Dic
-				fmt.Fprint(w, l)
+				// var l Dic
+				// fmt.Fprint(w, l)
 				append(cityToLoops, {len(numToCity)-1 [len(numToLoop)-1]})
     	}
 		}
