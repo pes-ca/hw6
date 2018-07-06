@@ -187,8 +187,8 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) (map[stri
 
 	// i < len(network)
 	for i := 0; i < 2 ; i++ {
-		// numToLoop = append(numToLoop, network[i].Name)
-		// fmt.Fprint(w, "numToLoop:", numToLoop, "\n")
+		numToLoop = append(numToLoop, network[i].Name)
+		fmt.Fprint(w, "numToLoop:", numToLoop, "\n")
 
 		// j < len(network[i].Stations
 		for j := 0; j < len(network[i].Stations) ; j++ {
