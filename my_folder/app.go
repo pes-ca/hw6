@@ -142,12 +142,6 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 
 }
 
-type Dic struct {
-	city  int
-	loops []int
-}
-
-
 
 //  []string, []string, []Dic, []Dic
 func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
@@ -162,7 +156,7 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
 
 	numToCity := make([]string, 0)
 	numToLoop := make([]string, 0)
-	cityToLoops := make([]Dic, 0)
+	cityToLoops := make([][]int, 15)
 	// make([]Dic, 1)  ->  cityToLoops:[{0 []}]
 	fmt.Fprint(w, "cityToLoops:", cityToLoops, "\n")
 	// loopToCities := make([]Dic, 0)
@@ -183,7 +177,7 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
 
 			// if the city has been seen before
 			if cityID, ok := cityToNum[network[i].Stations[j]]; ok {
-        cityToLoops[cityID].loops = append(cityToLoops[cityID].loops, len(numToLoop)-1)
+        // cityToLoops[cityID].loops = append(cityToLoops[cityID].loops, len(numToLoop)-1)
 				fmt.Fprint(w, "cityToLoops:", cityToLoops, "\n")
     	} else {
 				numToCity = append(numToCity, network[i].Stations[j])
@@ -191,8 +185,9 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
 				cityToNum[network[i].Stations[j]] = len(numToCity)-1
 				fmt.Fprint(w, "cityToNum:", cityToNum, "\n")
 
-				cityToLoops = append(cityToLoops, {len(numToCity)-1 [len(numToLoop)-1]})
-				fmt.Fprint(w, "cityToLoops:", cityToLoops, "\n")
+
+				// cityToLoops = append(cityToLoops, {len(numToCity)-1 [len(numToLoop)-1]})
+				// fmt.Fprint(w, "cityToLoops:", cityToLoops, "\n")
     	}
 		}
 	}
