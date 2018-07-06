@@ -189,7 +189,7 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
 				cityToNum[network[i].Stations[j]] = len(numToCity)-1
 				fmt.Fprint(w, "cityToNum:", cityToNum, "\n")
 				cityToLoops[len(numToCity)-1] = append(cityToLoops[len(numToCity)-1], len(numToLoop)-1)
-				fmt.Fprint(w, "cityToLoops:", cityToNum, "\n")
+				fmt.Fprint(w, "cityToLoops:", cityToLoops, "\n")
 				loopToCities[i] = append(loopToCities[i], len(numToCity)-1)
 				fmt.Fprint(w, "loopToCities:", loopToCities, "\n")
 
