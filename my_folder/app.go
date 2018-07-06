@@ -151,7 +151,7 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 
 
 //  []string, []string, []Dic, []Dic
-func networkInterpreter(w http.ResponseWriter, network TransitNetwork) map[string]int, []string, [][]int{
+func networkInterpreter(w http.ResponseWriter, network TransitNetwork) map[string]int; []string, [][]int{
 	// make a list of
 	// city1 [ list of loops that contain city1 ]
 	// city2 [ list of loops that contain city2 ]
