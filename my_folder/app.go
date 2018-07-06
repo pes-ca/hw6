@@ -202,7 +202,7 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) (map[stri
 				flag = 0
 				for n := 0; n < len(cityToLoops[cityID]) ; n ++ {
 					if cityToLoops[cityID][n] == len(numToLoop)-1 {
-						flag1 = 1
+						flag = 1
 					}
 				}
 				if flag == 0{
