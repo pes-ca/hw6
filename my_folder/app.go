@@ -161,7 +161,7 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
 	cityToCities := make([][]int, 15)
 	fmt.Fprint(w, "cityToCities:", cityToCities, "\n")
 
-	last_city := int
+	last_city := -1
 
 	// cityToLoops := make([][]int, 15)
 	// fmt.Fprint(w, "cityToLoops:", cityToLoops, "\n")
@@ -193,11 +193,12 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
 				if j > 0 {
 					cityToCities[last_city] = append(cityToCities[last_city], cityID)
 					cityToCities[cityID] = append(cityToCities[cityID], last_city)
+					last_city = cityID
 				} else {
-					last_city = len(numToCity)-1
+					last_city = cityID
 				}
 				fmt.Fprint(w, "cityToCities:", cityToCities, "\n")
-				
+
     	} else {
 				numToCity = append(numToCity, network[i].Stations[j])
 				fmt.Fprint(w, "numToCity:", numToCity, "\n")
@@ -207,6 +208,7 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
 				if j > 0 {
 					cityToCities[last_city] = append(cityToCities[last_city], len(numToCity)-1)
 					cityToCities[len(numToCity)-1] = append(cityToCities[len(numToCity)-1], last_city)
+					last_city = len(numToCity)-1
 				} else {
 					last_city = len(numToCity)-1
 				}
