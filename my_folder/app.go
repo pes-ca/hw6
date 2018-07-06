@@ -162,7 +162,7 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
 	numToCity := make([]string, 0)
 	numToLoop := make([]string, 0)
 	cityToLoops := make([]Dic, 0)
-	loopToCities := make([]Dic, 0)
+	// loopToCities := make([]Dic, 0)
 
 	l := new(Dic)
 	fmt.Fprint(w, cityToNum)
