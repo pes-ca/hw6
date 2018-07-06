@@ -178,7 +178,7 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
 		fmt.Fprint(w, "numToLoop:", numToLoop, "\n")
 
 		// j < len(network[i].Stations
-		for j := 0; j < len(network[i].Stations ; j++ {
+		for j := 0; j < len(network[i].Stations) ; j++ {
 			// city: network[i].Stations[j]
 
 			// if the city has been seen before
