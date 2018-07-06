@@ -113,6 +113,11 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
+	cityToNum, numToCity, cityToCities := networkInterpreter(w, network)
+	fmt.Fprint(w, "cityToNum:", cityToNum, "\n")
+	fmt.Fprint(w, "numToCity:", numToCity, "\n")
+	fmt.Fprint(w, "cityToCities:", cityToCities, "\n")
+
 	//city1 := r.FormValue("c")
 	//city2 := r.FormValue("d")
 
@@ -138,10 +143,7 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 	// handleExampleと同じようにtemplateにテンプレートを埋めて、出力する。
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	// tmpl.ExecuteTemplate(w, "norikae.html", network)
-	cityToNum, numToCity, cityToCities := networkInterpreter(w, network)
-	fmt.Fprint(w, "cityToNum:", cityToNum, "\n")
-	fmt.Fprint(w, "numToCity:", numToCity, "\n")
-	fmt.Fprint(w, "cityToCities:", cityToCities, "\n")
+
 
 }
 
@@ -149,7 +151,7 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 
 
 //  []string, []string, []Dic, []Dic
-func networkInterpreter(w http.ResponseWriter, network TransitNetwork)map[string]int, []string, [][]int{
+func networkInterpreter(w http.ResponseWriter, network TransitNetwork) map[string]int, []string, [][]int{
 	// make a list of
 	// city1 [ list of loops that contain city1 ]
 	// city2 [ list of loops that contain city2 ]
@@ -272,5 +274,7 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork)map[string
 	}
 
 
-	return cityToNum, numToCity, cityToCities
+	return cityToNum
+	return numToCity
+	return cityToCities
 }
