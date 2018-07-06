@@ -143,8 +143,8 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 }
 
 func existOrNot(cities [][]int, last int, current int) int, int {
-	var flag1 = 0
-	var flag2 = 0
+	var flag1 int = 0
+	var flag2 int = 0
 
 	for n := 0; n < len(cities[last]) ; n ++ {
 		if cities[last][n] == current {
@@ -152,7 +152,7 @@ func existOrNot(cities [][]int, last int, current int) int, int {
 		}
 	}
 
-	for n := 0; n < len(cities[last]) ; n ++ {
+	for m := 0; n < len(cities[last]) ; m ++ {
 		if cities[current][n] == last {
 			flag2 = 1
 		}
