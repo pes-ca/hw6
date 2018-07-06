@@ -199,7 +199,16 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) (map[stri
 
 			// if the city has been seen before
 			if cityID, ok := cityToNum[network[i].Stations[j]]; ok {
-        cityToLoops[cityID] = append(cityToLoops[cityID], len(numToLoop)-1)
+				flag = 0
+				for n := 0; n < len(cityToLoops[cityID]) ; n ++ {
+					if ccityToLoops[cityID][n] == len(numToLoop)-1 {
+						flag1 = 1
+					}
+				}
+				if flag == 0{
+					cityToLoops[cityID] = append(cityToLoops[cityID], len(numToLoop)-1)
+				}
+				
 				fmt.Fprint(w, "cityToLoops:", cityToLoops, "\n")
 				loopToCities[i] = append(loopToCities[i], cityID)
 				fmt.Fprint(w, "loopToCities:", loopToCities, "\n")
