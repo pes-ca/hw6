@@ -113,10 +113,13 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	cityToNum, numToCity, cityToCities := networkInterpreter(w, network)
+	cityToNum, numToCity, numToLoop, cityToLoops, loopToCities, cityToCities := networkInterpreter(w, network)
 	fmt.Fprint(w, "cityToNum:", cityToNum, "\n")
 	fmt.Fprint(w, "numToCity:", numToCity, "\n")
 	fmt.Fprint(w, "cityToCities:", cityToCities, "\n")
+	fmt.Fprint(w, "numToLoop:", numToLoop, "\n")
+	fmt.Fprint(w, "cityToLoops:", cityToLoops, "\n")
+	fmt.Fprint(w, "loopToCities:", loopToCities, "\n")
 
 	//city1 := r.FormValue("c")
 	//city2 := r.FormValue("d")
@@ -151,7 +154,7 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 
 
 //  []string, []string, []Dic, []Dic
-func networkInterpreter(w http.ResponseWriter, network TransitNetwork) (map[string]int, []string, [][]int){
+func networkInterpreter(w http.ResponseWriter, network TransitNetwork) (map[string]int, []string, []string, [][]int, [][]int, [][]int){
 	// make a list of
 	// city1 [ list of loops that contain city1 ]
 	// city2 [ list of loops that contain city2 ]
@@ -270,5 +273,5 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) (map[stri
 	}
 
 
-	return cityToNum, numToCity, cityToCities
+	return cityToNum, numToCity, numToLoop, cityToLoops, loopToCities, cityToCities
 }
