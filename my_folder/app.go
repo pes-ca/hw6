@@ -142,23 +142,7 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func existOrNot(cities [][]int, last int, current int) int, int {
-	flag1, flag2 := 0, 0
 
-	for n := 0; n < len(cities[last]) ; n ++ {
-		if cities[last][n] == current {
-			flag1 = 1
-		}
-	}
-
-	for m := 0; n < len(cities[last]) ; m ++ {
-		if cities[current][n] == last {
-			flag2 = 1
-		}
-	}
-
-	return flag1, flag2
-}
 
 
 //  []string, []string, []Dic, []Dic
@@ -180,6 +164,9 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
 	fmt.Fprint(w, "cityToCities:", cityToCities, "\n")
 
 	last_city := -1
+
+	flag1, flag2 := 0, 0
+
 
 
 	// cityToLoops := make([][]int, 15)
@@ -211,7 +198,17 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
 
 				if j > 0 {
 
-					flag1, flag2 := existOrNot(cityToCities, last_city, cityID)
+					flag1, flag2 = 0, 0
+					for n := 0; n < len(cityToCities[last_city]) ; n ++ {
+						if cityToCities[last_city][n] == cityID {
+							flag1 = 1
+						}
+					}
+					for n := 0; n < len(cityToCities[last_city]) ; n ++ {
+						if cityToCities[cityID][n] == last_city {
+							flag2 = 1
+						}
+					}
 
 					if flag1 == 0 {
 						cityToCities[last_city] = append(cityToCities[last_city], cityID)
@@ -234,7 +231,17 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
 
 				if j > 0 {
 
-					flag1, flag2 := existOrNot(cityToCities, last_city, len(numToCity)-1)
+					flag1, flag2 = 0, 0
+					for n := 0; n < len(cityToCities[last_city]) ; n ++ {
+						if cityToCities[last_city][n] == len(numToCity)-1 {
+							flag1 = 1
+						}
+					}
+					for n := 0; n < len(cityToCities[last_city]) ; n ++ {
+						if cityToCities[len(numToCity)-1][n] == last_city {
+							flag2 = 1
+						}
+					}
 
 					if flag1 == 0 {
 						cityToCities[last_city] = append(cityToCities[last_city], len(numToCity)-1)
