@@ -138,7 +138,7 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 	// handleExampleと同じようにtemplateにテンプレートを埋めて、出力する。
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	// tmpl.ExecuteTemplate(w, "norikae.html", network)
-	networkInterpreter(w, network)
+	cityToNum, numToCity, cityToCities = networkInterpreter(w, network)
 
 }
 
@@ -146,7 +146,7 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 
 
 //  []string, []string, []Dic, []Dic
-func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
+func networkInterpreter(w http.ResponseWriter, network TransitNetwork) map[string]int, []string, [][]int {
 	// make a list of
 	// city1 [ list of loops that contain city1 ]
 	// city2 [ list of loops that contain city2 ]
@@ -269,5 +269,5 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
 	}
 
 
-	// return cityNum, loopNum, cityToLoops
+	return cityToNum, numToCity, cityToCities
 }
