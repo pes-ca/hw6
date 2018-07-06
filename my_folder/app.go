@@ -166,7 +166,7 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) (map[stri
 
 	// adjacency list
 	cityToCities := make([][]int, 15)
-	fmt.Fprint(w, "cityToCities:", cityToCities, "\n")
+	fmt.Fprint(w, "\ncityToCities:", cityToCities, "\n")
 
 	last_city := -1
 
@@ -174,10 +174,10 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) (map[stri
 
 
 
-	// cityToLoops := make([][]int, 15)
-	// fmt.Fprint(w, "cityToLoops:", cityToLoops, "\n")
-	// fmt.Fprint(w, "cityToLoops[0]:", cityToLoops[0], "\n") -> cityToLoops[0]:[]
-	// loopToCities := make([][]int, 6)
+	cityToLoops := make([][]int, 15)
+	fmt.Fprint(w, "cityToLoops:", cityToLoops, "\n")
+	fmt.Fprint(w, "cityToLoops[0]:", cityToLoops[0], "\n") -> cityToLoops[0]:[]
+	loopToCities := make([][]int, 6)
 
 
 	//l := new(Dic)
@@ -196,10 +196,10 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) (map[stri
 
 			// if the city has been seen before
 			if cityID, ok := cityToNum[network[i].Stations[j]]; ok {
-        //cityToLoops[cityID] = append(cityToLoops[cityID], len(numToLoop)-1)
-				//fmt.Fprint(w, "cityToLoops:", cityToLoops, "\n")
-				//loopToCities[i] = append(loopToCities[i], cityID)
-				//fmt.Fprint(w, "loopToCities:", loopToCities, "\n")
+        cityToLoops[cityID] = append(cityToLoops[cityID], len(numToLoop)-1)
+				fmt.Fprint(w, "cityToLoops:", cityToLoops, "\n")
+				loopToCities[i] = append(loopToCities[i], cityID)
+				fmt.Fprint(w, "loopToCities:", loopToCities, "\n")
 
 				if j > 0 {
 
@@ -261,14 +261,10 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) (map[stri
 				}
 				fmt.Fprint(w, "cityToCities:", cityToCities, "\n")
 
-				//cityToLoops[len(numToCity)-1] = append(cityToLoops[len(numToCity)-1], len(numToLoop)-1)
-				//fmt.Fprint(w, "cityToLoops:", cityToLoops, "\n")
-				//loopToCities[i] = append(loopToCities[i], len(numToCity)-1)
-				//fmt.Fprint(w, "loopToCities:", loopToCities, "\n")
-
-
-				// cityToLoops = append(cityToLoops, {len(numToCity)-1 [len(numToLoop)-1]})
-				// fmt.Fprint(w, "cityToLoops:", cityToLoops, "\n")
+				cityToLoops[len(numToCity)-1] = append(cityToLoops[len(numToCity)-1], len(numToLoop)-1)
+				fmt.Fprint(w, "cityToLoops:", cityToLoops, "\n")
+				loopToCities[i] = append(loopToCities[i], len(numToCity)-1)
+				fmt.Fprint(w, "loopToCities:", loopToCities, "\n")
     	}
 		}
 	}
