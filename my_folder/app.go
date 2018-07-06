@@ -162,7 +162,7 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
 
 	numToCity := make([]string, 0)
 	numToLoop := make([]string, 0)
-	cityToLoops := make([]Dic, 0)
+	cityToLoops := make([]Dic, 1)
 	fmt.Fprint(w, "cityToLoops:", cityToLoops, "\n")
 	// loopToCities := make([]Dic, 0)
 
@@ -180,6 +180,8 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
 		// j < len(network[i].Stations
 		for j := 0; j < 2 ; j++ {
 			// city: network[i].Stations[j]
+
+			// if the city has been seen before
 			if cityID, ok := cityToNum[network[i].Stations[j]]; ok {
         cityToLoops[cityID].loops = append(cityToLoops[cityID].loops, len(numToLoop)-1)
 				fmt.Fprint(w, "cityToLoops:", cityToLoops, "\n")
@@ -188,7 +190,7 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
 				fmt.Fprint(w, "numToCity:", numToCity, "\n")
 				cityToNum[network[i].Stations[j]] = len(numToCity)-1
 				fmt.Fprint(w, "cityToNum:", cityToNum, "\n")
-
+				len(numToLoop)
 
 
 				// append(cityToLoops, {len(numToCity)-1 [len(numToLoop)-1]})
