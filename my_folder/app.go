@@ -176,7 +176,7 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) (map[stri
 
 	cityToLoops := make([][]int, 15)
 	fmt.Fprint(w, "cityToLoops:", cityToLoops, "\n")
-	fmt.Fprint(w, "cityToLoops[0]:", cityToLoops[0], "\n") -> cityToLoops[0]:[]
+	// fmt.Fprint(w, "cityToLoops[0]:", cityToLoops[0], "\n") -> cityToLoops[0]:[]
 	loopToCities := make([][]int, 6)
 
 
