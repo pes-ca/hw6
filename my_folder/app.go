@@ -159,10 +159,12 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) []string,
 	cityToLoops := []Dic
 	loopToCities := []Dic
 
-	for i := 0; i < 1 ; i++ { // i < len(network)
+	// i < len(network)
+	for i := 0; i < 1 ; i++ {
 		append(numToLoop, network[i].Name)
 		fmt.Fprint(w, numToLoop)
-		for j := 0; j < 1 ; j++ { // j < len(network[i].Stations
+		// j < len(network[i].Stations
+		for j := 0; j < 1 ; j++ {
 			// city: network[i].Stations[j]
 
 			if cityID, ok := cityToNum[network[i].Stations[j]]; ok {
