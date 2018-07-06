@@ -274,7 +274,5 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) (map[stri
 	}
 
 
-	return cityToNum
-	return numToCity
-	return cityToCities
+	return cityToNum, numToCity, cityToCities
 }
