@@ -156,12 +156,13 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
 	// city2 [ list of loops that contain city2 ]
 	// ...
 
-	cityToNum := map[string]int{} //
-	numToCity := []string //
-	numToLoop := []string //
-	cityToLoops := []Dic
-	loopToCities := []Dic
-	
+	cityToNum := map[string]int{}
+
+	//numToCity := []string
+	//numToLoop := []string
+	//cityToLoops := []Dic
+	//loopToCities := []Dic
+
 	l := Dic
 
 	// i < len(network)
