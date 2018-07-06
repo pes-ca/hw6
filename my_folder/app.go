@@ -139,6 +139,9 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	// tmpl.ExecuteTemplate(w, "norikae.html", network)
 	cityToNum, numToCity, cityToCities = networkInterpreter(w, network)
+	fmt.Fprint(w, "cityToNum:", cityToNum, "\n")
+	fmt.Fprint(w, "numToCity:", numToCity, "\n")
+	fmt.Fprint(w, "cityToCities:", cityToCities, "\n")
 
 }
 
