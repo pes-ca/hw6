@@ -142,6 +142,25 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func existOrNot(cities [][]int, last int, current int) int, int {
+	flag1 := 0
+	flag2 := 0
+
+	for n := 0; n < len(cities[last]) ; n ++ {
+		if cities[last][n] == current {
+			flag1 = 1
+		}
+	}
+
+	for n := 0; n < len(cities[last]) ; n ++ {
+		if cities[current][n] == last {
+			flag2 = 1
+		}
+	}
+
+	return flag1, flag2
+}
+
 
 //  []string, []string, []Dic, []Dic
 func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
@@ -162,6 +181,7 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
 	fmt.Fprint(w, "cityToCities:", cityToCities, "\n")
 
 	last_city := -1
+
 
 	// cityToLoops := make([][]int, 15)
 	// fmt.Fprint(w, "cityToLoops:", cityToLoops, "\n")
@@ -191,8 +211,16 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
 				//fmt.Fprint(w, "loopToCities:", loopToCities, "\n")
 
 				if j > 0 {
-					cityToCities[last_city] = append(cityToCities[last_city], cityID)
-					cityToCities[cityID] = append(cityToCities[cityID], last_city)
+
+					flag1, flag2 := existOrNot(cityToCities, last_city, cityID)
+
+					if flag1 == 0 {
+						cityToCities[last_city] = append(cityToCities[last_city], cityID)
+					}
+					if flag2 == 0 {
+						cityToCities[cityID] = append(cityToCities[cityID], last_city)
+					}
+
 					last_city = cityID
 				} else {
 					last_city = cityID
@@ -206,8 +234,16 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) {
 				fmt.Fprint(w, "cityToNum:", cityToNum, "\n")
 
 				if j > 0 {
-					cityToCities[last_city] = append(cityToCities[last_city], len(numToCity)-1)
-					cityToCities[len(numToCity)-1] = append(cityToCities[len(numToCity)-1], last_city)
+
+					flag1, flag2 := existOrNot(cityToCities, last_city, len(numToCity)-1)
+
+					if flag1 == 0 {
+						cityToCities[last_city] = append(cityToCities[last_city], len(numToCity)-1)
+					}
+					if flag2 == 0 {
+						cityToCities[len(numToCity)-1] = append(cityToCities[len(numToCity)-1], last_city)
+					}
+
 					last_city = len(numToCity)-1
 				} else {
 					last_city = len(numToCity)-1
