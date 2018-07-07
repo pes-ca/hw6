@@ -7,8 +7,9 @@ import (
 	"net/http"
 
 	"appengine"
-	// "google.golang.org/appengine"
-	"google.golang.org/appengine/urlfetch"
+	//"google.golang.org/appengine"
+	"appengine/urlfetch"
+	//"google.golang.org/appengine/urlfetch"
 
 	"unicode/utf8"
 )
