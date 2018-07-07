@@ -6,8 +6,8 @@ import (
 	"html/template"
 	"net/http"
 
-	//"appengine"
-	"google.golang.org/appengine"
+	"appengine"
+	//"google.golang.org/appengine"
 	"appengine/urlfetch"
 	//"google.golang.org/appengine/urlfetch"
 
