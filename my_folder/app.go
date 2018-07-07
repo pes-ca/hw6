@@ -6,7 +6,8 @@ import (
 	"html/template"
 	"net/http"
 
-	"google.golang.org/appengine"
+	"appengine"
+	// "google.golang.org/appengine"
 	"google.golang.org/appengine/urlfetch"
 
 	"unicode/utf8"
@@ -280,7 +281,5 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) (map[stri
     	}
 		}
 	}
-
-
 	return cityToNum, numToCity, numToLoop, cityToLoops, loopToCities, cityToCities
 }
