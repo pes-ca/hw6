@@ -12,6 +12,7 @@ import (
 	"google.golang.org/appengine/urlfetch"
 
 	"unicode/utf8"
+	"container/list"
 )
 
 func init() {
@@ -148,139 +149,207 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 	// handleExampleと同じようにtemplateにテンプレートを埋めて、出力する。
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	// tmpl.ExecuteTemplate(w, "norikae.html", network)
+	fmt.Fprint(w, "numToCity[4]:", numToCity[4], "\n")
+	fmt.Fprint(w, "numToCity[11]:", numToCity[11], "\n")
+	BFS(w, cityToCities, 4, 11, numToCity)
+
+}
+
+// delete overlap in [][]int that needs to be treated like set
+func deleteOverlap2(array [][]int) [][]int {
+	// arr := [string]{"a", "b", "c", "a"}
+	uniqArray := [][]int{}
+	for _, arr := range array {
+		uniq := []int{}
+		m := make(map[int]bool)
+		for _, ele := range arr {
+				if !m[ele] {
+						m[ele] = true
+						uniq = append(uniq, ele)
+				}
+		}
+		uniqArray = append(uniqArray, uniq)
+	}
+	return uniqArray
+}
+
+
+type Info struct {
+	Transits     []int
+	Lines []int
+	City int
+	Last int
+	Depth int
+}
+
+type Route struct {
+	Transits     []int
+	Lines []int
+}
+
+func BFS(w http.ResponseWriter, l [][][]int, start int, goal int, numToCity []string){
+	// 参考: https://qiita.com/fmhr/items/fa5a7d9b785456446768
+	q := list.New()            //init
+	//front :=0
+	// q.PushBack(x)           //Enqueue
+	// v := q.Remove(q.Front)  //Dequeue
+	// length = q.Len()				 //Length
+	var first Info
+	first.City = start
+	first.Depth = 0
+	fmt.Fprint(w, "first:", first, "\n")
+
+	q.PushBack(first)
+
+	//delete later from here
+	q.PushBack(first)
+	front := q.Front().Value
+	q.Remove(q.Front())
+	fmt.Fprint(w, "q:", front, "\n")
+	//fmt.Fprint(w, "q:", front[0], "\n")
+	//delete later to here
+
+	var routes_min_depth []Route
+	var	routes_min_transits []Route
+	min_depth := 1000000
+	min_transits := 1000000
+
+	count:=0
+
+	for true {
+
+	  count = count + 1
+		if count == 50{
+			break
+		}
+	  if q.Len() == 0 {
+	    break
+	  }
+
+	  node_info := q.Front().Value.(Info)
+		//fmt.Fprint(w, "node_info:", numToCity[node_info.City],  node_info, "\n")
+	  //fmt.Fprint(w, "q:", node_info.Depth, "\n")
+	  q.Remove(q.Front())
+
+	  //transits:= node_info.Transits
+	  //lines:= node_info.Lines
+	  //cur_city:= node_info.City
+	  //depth:= node_info.Depth
+
+		var new_info Info
+
+
+		//fmt.Fprint(w, "transits:", transits, "\n")
+		//fmt.Fprint(w, "lines:", lines, "\n")
+		//fmt.Fprint(w, "cur_city:", cur_city, "\n")
+		//fmt.Fprint(w, "depth:", depth, "\n")
+
+		for _, city_info := range l[node_info.City] {
+		  city := city_info[0]
+		  line := city_info[1]
+		  if city == node_info.Last {
+		    continue
+		  } else{
+				if len(node_info.Lines) == 0{
+					new_info.Transits = node_info.Transits
+					new_info.Lines = append(node_info.Lines, line)
+				} else {
+					if line != node_info.Lines[len(node_info.Lines) - 1]{
+			      new_info.Transits = append(node_info.Transits, node_info.City)
+			      new_info.Lines = append(node_info.Lines, line)
+			    } else {
+						new_info.Transits = node_info.Transits
+						new_info.Lines = node_info.Lines
+					}
+				}
+
+				new_info.Depth = node_info.Depth + 1
+				new_info.Last = node_info.City
+				new_info.City = city
+
+				if city == goal{
+					fmt.Fprint(w, "city, goal:", city, goal, "\n")
+					if new_info.Depth <= min_depth{
+						var new_route Route
+						new_route.Transits = new_info.Transits
+						new_route.Lines = new_info.Lines
+						routes_min_depth = append(routes_min_depth, new_route)
+						min_depth = new_info.Depth
+					}
+					if len(new_info.Transits) <= min_transits{
+						fmt.Fprint(w, "new_info.Depth:", new_info.Depth, "\n")
+						var new_route Route
+						new_route.Transits = new_info.Transits
+						new_route.Lines = new_info.Lines
+						routes_min_transits = append(routes_min_transits, new_route)
+						min_transits = len(new_info.Transits)
+
+					fmt.Fprint(w, "routes_min_depth:", routes_min_depth, "\n")
+					fmt.Fprint(w, "routes_min_transits:", routes_min_transits, "\n")
+					}
+				} else {
+					q.PushBack(new_info)
+				}
+		  }
+		}
+
+	}
 
 
 }
 
 
-
-
 //  []string, []string, []Dic, []Dic
-func networkInterpreter(w http.ResponseWriter, network TransitNetwork) (map[string]int, []string, []string, [][]int, [][]int, [][]int){
-	// make a list of
-	// city1 [ list of loops that contain city1 ]
-	// city2 [ list of loops that contain city2 ]
-	// ...
-
-	cityToNum := make(map[string]int)
-	// map[]
-	// fmt.Fprint(w, cityToNum)
-
+func networkInterpreter(w http.ResponseWriter, network TransitNetwork) (map[string]int, []string, []string, [][]int, [][]int, [][][]int){
+	// initialisation
+	cityToNum := make(map[string]int) // map[]
 	numToCity := make([]string, 0)
 	numToLoop := make([]string, 0)
 
-	// adjacency list
-	cityToCities := make([][]int, 15)
-	fmt.Fprint(w, "\ncityToCities:", cityToCities, "\n")
-
-	last_city := -1
-	flag := 0
-	flag1, flag2 := 0, 0
-
-
-
 	cityToLoops := make([][]int, 15)
-	fmt.Fprint(w, "cityToLoops:", cityToLoops, "\n")
-	// fmt.Fprint(w, "cityToLoops[0]:", cityToLoops[0], "\n") -> cityToLoops[0]:[]
 	loopToCities := make([][]int, 6)
 
+	// adjacency list
+	cityToCities := make([][][]int, 15)	//l := new(Dic)
 
-	//l := new(Dic)
-	// &{0 []}
-	//fmt.Fprint(w, l)
-
+	last_city := -1
 
 	// i < len(network)
-	for i := 0; i < 2 ; i++ {
+	for i := 0; i < len(network) ; i++ {
 		numToLoop = append(numToLoop, network[i].Name)
-		fmt.Fprint(w, "numToLoop:", numToLoop, "\n")
 
-		// j < len(network[i].Stations
 		for j := 0; j < len(network[i].Stations) ; j++ {
-			// city: network[i].Stations[j]
-
 			// if the city has been seen before
 			if cityID, ok := cityToNum[network[i].Stations[j]]; ok {
-				flag = 0
-				for n := 0; n < len(cityToLoops[cityID]) ; n ++ {
-					if cityToLoops[cityID][n] == len(numToLoop)-1 {
-						flag = 1
-					}
-				}
-				if flag == 0{
-					cityToLoops[cityID] = append(cityToLoops[cityID], len(numToLoop)-1)
-				}
-
-				fmt.Fprint(w, "cityToLoops:", cityToLoops, "\n")
+				cityToLoops[cityID] = append(cityToLoops[cityID], len(numToLoop)-1)
 				loopToCities[i] = append(loopToCities[i], cityID)
-				fmt.Fprint(w, "loopToCities:", loopToCities, "\n")
 
 				if j > 0 {
-
-					flag1, flag2 = 0, 0
-					for n := 0; n < len(cityToCities[last_city]) ; n ++ {
-						if cityToCities[last_city][n] == cityID {
-							flag1 = 1
-						}
-					}
-					for n := 0; n < len(cityToCities[cityID]) ; n ++ {
-						if cityToCities[cityID][n] == last_city {
-							flag2 = 1
-						}
-					}
-
-					if flag1 == 0 {
-						cityToCities[last_city] = append(cityToCities[last_city], cityID)
-					}
-					if flag2 == 0 {
-						cityToCities[cityID] = append(cityToCities[cityID], last_city)
-					}
-
+					cityToCities[last_city] = append(cityToCities[last_city], []int{cityID, len(numToLoop)-1})
+					cityToCities[cityID] = append(cityToCities[cityID], []int{last_city, len(numToLoop)-1})
 					last_city = cityID
 				} else {
 					last_city = cityID
 				}
-				fmt.Fprint(w, "cityToCities:", cityToCities, "\n")
 
     	} else {
 				numToCity = append(numToCity, network[i].Stations[j])
-				fmt.Fprint(w, "numToCity:", numToCity, "\n")
 				cityToNum[network[i].Stations[j]] = len(numToCity)-1
-				fmt.Fprint(w, "cityToNum:", cityToNum, "\n")
 
 				if j > 0 {
-
-					flag1, flag2 = 0, 0
-					for n := 0; n < len(cityToCities[last_city]) ; n ++ {
-						if cityToCities[last_city][n] == len(numToCity)-1 {
-							flag1 = 1
-						}
-					}
-					for n := 0; n < len(cityToCities[len(numToCity)-1]) ; n ++ {
-						if cityToCities[len(numToCity)-1][n] == last_city {
-							flag2 = 1
-						}
-					}
-
-					if flag1 == 0 {
-						cityToCities[last_city] = append(cityToCities[last_city], len(numToCity)-1)
-					}
-					if flag2 == 0 {
-						cityToCities[len(numToCity)-1] = append(cityToCities[len(numToCity)-1], last_city)
-					}
-
+					cityToCities[last_city] = append(cityToCities[last_city], []int{len(numToCity)-1, len(numToLoop)-1})
+					cityToCities[len(numToCity)-1] = append(cityToCities[len(numToCity)-1], []int{last_city, len(numToLoop)-1})
 					last_city = len(numToCity)-1
 				} else {
 					last_city = len(numToCity)-1
 				}
-				fmt.Fprint(w, "cityToCities:", cityToCities, "\n")
 
 				cityToLoops[len(numToCity)-1] = append(cityToLoops[len(numToCity)-1], len(numToLoop)-1)
-				fmt.Fprint(w, "cityToLoops:", cityToLoops, "\n")
 				loopToCities[i] = append(loopToCities[i], len(numToCity)-1)
-				fmt.Fprint(w, "loopToCities:", loopToCities, "\n")
     	}
 		}
 	}
+	cityToLoops = deleteOverlap2(cityToLoops)
+	loopToCities = deleteOverlap2(loopToCities)
 	return cityToNum, numToCity, numToLoop, cityToLoops, loopToCities, cityToCities
 }
