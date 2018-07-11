@@ -1,15 +1,15 @@
 package app
 
 import (
-	"fmt"
+	//"fmt"
 	"encoding/json"
 	"html/template"
 	"net/http"
 
-	//"appengine"
-	"google.golang.org/appengine"
-	//"appengine/urlfetch"
-	"google.golang.org/appengine/urlfetch"
+	"appengine"
+	//"google.golang.org/appengine"
+	"appengine/urlfetch"
+	//"google.golang.org/appengine/urlfetch"
 
 	"unicode/utf8"
 	"container/list"
@@ -28,6 +28,7 @@ var tmpl = template.Must(template.ParseGlob("*.html"))
 type Page struct {
 	A string
 	B string
+	C string
 }
 
 func handleExample(w http.ResponseWriter, r *http.Request) {
@@ -93,7 +94,20 @@ type Line struct {
 // の一番外側のリストのことを表しています。
 type TransitNetwork []Line
 
+func getSelected(r *http.Request)(if_valid bool, time_transits string) {
+	slice:=[]string{"1","2"}
+	for _, v := range slice {
+	    if v == r.Form.Get("time_or_transits") {
+	        return true, v
+	    }
+	}
+	return false, "0"
+}
+
 func handleNorikae(w http.ResponseWriter, r *http.Request) {
+	// handleExampleと同じようにtemplateにテンプレートを埋めて、出力する。
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+
 	// Appengineの「Context」を通してAppengineのAPIを利用する。
 	ctx := appengine.NewContext(r)
 
@@ -115,49 +129,76 @@ func handleNorikae(w http.ResponseWriter, r *http.Request) {
 	if err := decoder.Decode(&network); err != nil {
 		panic(err)
 	}
+		// fmt.Fprint(w, network)
+		//  -> [{Outer Loop [Pallet Town Viridian City Pewter City Cerulean City Lavender Town Fuschia City Celadon City Saffron City Lavender Town]} {Inner Loop [Saffron City Vermillion City Fuschia City Celadon City Saffron City]} {Victory Road [Viridian City Mt. Silver Indigo Plateau]} {Seafoam Island Ferry [Fuschia City Cinnibar island Pallet Town]} {Route 11 [Vermillion City Lavender Town]} {Diglett Network [Vermillion Cave Viridian Cave Rock Tunnel Cave]}]
+		// fmt.Fprint(w, network[0])
+		//  -> {Outer Loop [Pallet Town Viridian City Pewter City Cerulean City Lavender Town Fuschia City Celadon City Saffron City Lavender Town]}
+		// fmt.Fprint(w, network[0].Stations)
+		//  -> [Pallet Town Viridian City Pewter City Cerulean City Lavender Town Fuschia City Celadon City Saffron City Lavender Town]
+		// fmt.Fprint(w, network[0].Stations[0])
+		//  -> Pallet Town
 
-	cityToNum, numToCity, numToLoop, cityToLoops, loopToCities, cityToCities := networkInterpreter(w, network)
-	fmt.Fprint(w, "cityToNum:", cityToNum, "\n")
-	fmt.Fprint(w, "numToCity:", numToCity, "\n")
-	fmt.Fprint(w, "cityToCities:", cityToCities, "\n")
-	fmt.Fprint(w, "numToLoop:", numToLoop, "\n")
-	fmt.Fprint(w, "cityToLoops:", cityToLoops, "\n")
-	fmt.Fprint(w, "loopToCities:", loopToCities, "\n")
+	cityToNum, numToCity, numToLoop, cityToCities := networkInterpreter(w, network)
 
-	//city1 := r.FormValue("c")
-	//city2 := r.FormValue("d")
+	city1 := r.FormValue("c")
+	city2 := r.FormValue("d")
+
+	routes_min_depth, routes_min_transits := BFS(w, cityToCities, cityToNum[city1], cityToNum[city2], numToCity)
+
+	if_valid, time_transits := getSelected(r)
+	result := ""
+	if if_valid{
+	  if time_transits == "1"{
+			if len(routes_min_transits) == 0{
+				result += "not found"
+			}
+			for num, route := range routes_min_transits {
+				for i, transit := range route.Transits {
+					result += numToLoop[route.Lines[i]]
+					result += " --> Change at "
+					result += numToCity[transit]
+					result += " to --> "
+				}
+				result +=  numToLoop[route.Lines[len(route.Lines)-1]]
+				if num != len(routes_min_transits) -1{
+					result += "\nNEXT ROUTE\n"
+				}
+			}
+			result += "\n"
+
+	  } else if time_transits == "2"{
+			if len(routes_min_depth) == 0{
+				result += "not found"
+			}
+			for num, route := range routes_min_depth {
+				for i, transit := range route.Transits {
+					result += numToLoop[route.Lines[i]]
+					result += " --> Change at "
+					result += numToCity[transit]
+					result += " to --> "
+				}
+				result +=  numToLoop[route.Lines[len(route.Lines)-1]]
+				if num != len(routes_min_depth) -1{
+					result += "\nNEXT ROUTE\n"
+				}
+			}
+			result += "\n"
+	  }
+	}
 
 	// templateに埋める内容をrequestのFormValueから用意する。
-	//content2 := Page{
-	//	A: city1,
-	//	B: city2,
-	// }
+	content2 := Page{
+		A: city1,
+		B: city2,
+		C: result,
+	}
 
-	// fmt.Fprint(w, network)
-	// -> [{Outer Loop [Pallet Town Viridian City Pewter City Cerulean City Lavender Town Fuschia City Celadon City Saffron City Lavender Town]} {Inner Loop [Saffron City Vermillion City Fuschia City Celadon City Saffron City]} {Victory Road [Viridian City Mt. Silver Indigo Plateau]} {Seafoam Island Ferry [Fuschia City Cinnibar island Pallet Town]} {Route 11 [Vermillion City Lavender Town]} {Diglett Network [Vermillion Cave Viridian Cave Rock Tunnel Cave]}]
-
-	// fmt.Fprint(w, network[0])
-	// -> {Outer Loop [Pallet Town Viridian City Pewter City Cerulean City Lavender Town Fuschia City Celadon City Saffron City Lavender Town]}
-
-	// fmt.Fprint(w, network[0].Stations)
-	// [Pallet Town Viridian City Pewter City Cerulean City Lavender Town Fuschia City Celadon City Saffron City Lavender Town]
-
-	// fmt.Fprint(w, network[0].Stations[0])
-	// Pallet Town
-
-
-	// handleExampleと同じようにtemplateにテンプレートを埋めて、出力する。
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	// tmpl.ExecuteTemplate(w, "norikae.html", network)
-	fmt.Fprint(w, "numToCity[4]:", numToCity[4], "\n")
-	fmt.Fprint(w, "numToCity[11]:", numToCity[11], "\n")
-	BFS(w, cityToCities, 4, 11, numToCity)
+	tmpl.ExecuteTemplate(w, "norikae.html", content2)
 
 }
 
 // delete overlap in [][]int that needs to be treated like set
 func deleteOverlap2(array [][]int) [][]int {
-	// arr := [string]{"a", "b", "c", "a"}
 	uniqArray := [][]int{}
 	for _, arr := range array {
 		uniq := []int{}
@@ -187,27 +228,15 @@ type Route struct {
 	Lines []int
 }
 
-func BFS(w http.ResponseWriter, l [][][]int, start int, goal int, numToCity []string){
-	// 参考: https://qiita.com/fmhr/items/fa5a7d9b785456446768
-	q := list.New()            //init
-	//front :=0
-	// q.PushBack(x)           //Enqueue
-	// v := q.Remove(q.Front)  //Dequeue
-	// length = q.Len()				 //Length
+
+func BFS(w http.ResponseWriter, l [][][]int, start int, goal int, numToCity []string) ([]Route, []Route){
+	q := list.New()
+
 	var first Info
 	first.City = start
 	first.Depth = 0
-	fmt.Fprint(w, "first:", first, "\n")
 
 	q.PushBack(first)
-
-	//delete later from here
-	q.PushBack(first)
-	front := q.Front().Value
-	q.Remove(q.Front())
-	fmt.Fprint(w, "q:", front, "\n")
-	//fmt.Fprint(w, "q:", front[0], "\n")
-	//delete later to here
 
 	var routes_min_depth []Route
 	var	routes_min_transits []Route
@@ -227,22 +256,10 @@ func BFS(w http.ResponseWriter, l [][][]int, start int, goal int, numToCity []st
 	  }
 
 	  node_info := q.Front().Value.(Info)
-		//fmt.Fprint(w, "node_info:", numToCity[node_info.City],  node_info, "\n")
-	  //fmt.Fprint(w, "q:", node_info.Depth, "\n")
+
 	  q.Remove(q.Front())
 
-	  //transits:= node_info.Transits
-	  //lines:= node_info.Lines
-	  //cur_city:= node_info.City
-	  //depth:= node_info.Depth
-
 		var new_info Info
-
-
-		//fmt.Fprint(w, "transits:", transits, "\n")
-		//fmt.Fprint(w, "lines:", lines, "\n")
-		//fmt.Fprint(w, "cur_city:", cur_city, "\n")
-		//fmt.Fprint(w, "depth:", depth, "\n")
 
 		for _, city_info := range l[node_info.City] {
 		  city := city_info[0]
@@ -268,48 +285,60 @@ func BFS(w http.ResponseWriter, l [][][]int, start int, goal int, numToCity []st
 				new_info.City = city
 
 				if city == goal{
-					fmt.Fprint(w, "city, goal:", city, goal, "\n")
-					if new_info.Depth <= min_depth{
+					//fmt.Fprint(w, "city, goal:", city, goal, "\n")
+					if new_info.Depth == min_depth{
 						var new_route Route
 						new_route.Transits = new_info.Transits
 						new_route.Lines = new_info.Lines
 						routes_min_depth = append(routes_min_depth, new_route)
 						min_depth = new_info.Depth
+					} else if len(new_info.Transits) < min_transits {
+						var new_route Route
+						new_route.Transits = new_info.Transits
+						new_route.Lines = new_info.Lines
+						routes_min_depth = make([]Route, 0)
+						routes_min_depth = append(routes_min_depth, new_route)
+						min_depth = new_info.Depth
 					}
-					if len(new_info.Transits) <= min_transits{
-						fmt.Fprint(w, "new_info.Depth:", new_info.Depth, "\n")
+					if len(new_info.Transits) == min_transits{
+						//fmt.Fprint(w, "new_info.Depth:", new_info.Depth, "\n")
 						var new_route Route
 						new_route.Transits = new_info.Transits
 						new_route.Lines = new_info.Lines
 						routes_min_transits = append(routes_min_transits, new_route)
 						min_transits = len(new_info.Transits)
 
-					fmt.Fprint(w, "routes_min_depth:", routes_min_depth, "\n")
-					fmt.Fprint(w, "routes_min_transits:", routes_min_transits, "\n")
+					//fmt.Fprint(w, "routes_min_depth:", routes_min_depth, "\n")
+					//fmt.Fprint(w, "routes_min_transits:", routes_min_transits, "\n")
+					} else if len(new_info.Transits) < min_transits {
+						var new_route Route
+						new_route.Transits = new_info.Transits
+						new_route.Lines = new_info.Lines
+						routes_min_transits = make([]Route, 0)
+						routes_min_transits = append(routes_min_transits, new_route)
+						min_transits = len(new_info.Transits)
 					}
 				} else {
 					q.PushBack(new_info)
 				}
 		  }
 		}
-
 	}
-
-
+	return routes_min_depth, routes_min_transits
 }
 
 
-//  []string, []string, []Dic, []Dic
-func networkInterpreter(w http.ResponseWriter, network TransitNetwork) (map[string]int, []string, []string, [][]int, [][]int, [][][]int){
+
+func networkInterpreter(w http.ResponseWriter, network TransitNetwork) (map[string]int, []string, []string, [][][]int){
 	// initialisation
-	cityToNum := make(map[string]int) // map[]
+	cityToNum := make(map[string]int)
 	numToCity := make([]string, 0)
 	numToLoop := make([]string, 0)
 
+	//cityToLoops, loopToCities: made but not used outside this function at the moment
 	cityToLoops := make([][]int, 15)
 	loopToCities := make([][]int, 6)
 
-	// adjacency list
 	cityToCities := make([][][]int, 15)	//l := new(Dic)
 
 	last_city := -1
@@ -349,7 +378,8 @@ func networkInterpreter(w http.ResponseWriter, network TransitNetwork) (map[stri
     	}
 		}
 	}
+	//cityToLoops, loopToCities: made but not used outside this function at the moment
 	cityToLoops = deleteOverlap2(cityToLoops)
 	loopToCities = deleteOverlap2(loopToCities)
-	return cityToNum, numToCity, numToLoop, cityToLoops, loopToCities, cityToCities
+	return cityToNum, numToCity, numToLoop, cityToCities
 }

@@ -1,31 +1,33 @@
 <html>
   <head><title>JSONを読み込む例</title></head>
   <body>
-
+    ポケモン乗り換え案内<br>
+    <a href="http://pokemon.fantasy-transit.appspot.com/map">地図はこちら</a>
+    <br>
+    <br>
     <form>
-      <input type=text name=c value="Example: Pallet Town" >
-      <input type=text name=d value="Example: Viridian City" >
+      from: <input type=text name=c value="" >
+      <br>
+      to: <input type=text name=d value="" >
+      <br>
+      <br>
+      <input type="radio" name="time_or_transits" value="1">乗り換え回数が最も少ない行き方
+      <br>
+      <input type="radio" name="time_or_transits" value="2">かかる時間が最も短い行き方
+      <br>
       <input type=submit>
     </form>
+    <br>
 
+    〜検索結果〜
     <ul>
       <li> from:  {{.A}} </li>
       <li> to:  {{.B}} </li>
+      <li> result:  {{.C}} </li>
     </ul>
 
-    路線：
+    <a href="/patcartaxi">パタトクカシー</a>も見てみてください。
 
-    <ul>
-      {{range .}}
-      <li> {{.Name}}
-        <ul>
-          {{range .Stations}}
-          <li> {{.}} </li>
-          {{end}}
-        </ul>
-      </li>
-      {{end}}
-    </ul>
 
   </body>
 </html>
